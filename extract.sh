@@ -13,8 +13,10 @@ fi
 : "${FORGEJO_USER:?FORGEJO_USER is required}"
 : "${FORGEJO_REPO:?FORGEJO_REPO is required}"
 : "${FORGEJO_URL:?FORGEJO_URL is required}"
-: "${TELEGRAM_TOKEN:?TELEGRAM_TOKEN is required}"
-: "${TELEGRAM_CHAT_ID:?TELEGRAM_CHAT_ID is required}"
+
+# Telegram is optional — notifications are skipped if not configured
+TELEGRAM_TOKEN="${TELEGRAM_TOKEN:-}"
+TELEGRAM_CHAT_ID="${TELEGRAM_CHAT_ID:-}"
 
 LAST_VERSION_FILE="$SCRIPT_DIR/.last_version"
 TMPDIR="$(mktemp -d)"
@@ -22,6 +24,7 @@ TMPDIR="$(mktemp -d)"
 log() { echo "[$(date '+%Y-%m-%d %H:%M:%S')] $*"; }
 
 send_telegram() {
+    [[ -z "$TELEGRAM_TOKEN" || -z "$TELEGRAM_CHAT_ID" ]] && return 0
     local message="$1"
     curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
         -d "chat_id=${TELEGRAM_CHAT_ID}" \
