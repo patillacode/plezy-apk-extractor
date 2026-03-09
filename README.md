@@ -6,7 +6,7 @@ Since Plezy v1.13.0, Android assets ship as architecture-specific `.tar.gz` tarb
 
 ## Obtainium setup
 
-When adding the app in Obtainium, set the source URL to your Forgejo repo and select **Forgejo (Codeberg)** as the override source:
+When adding the app in Obtainium, set the source URL to this (or your) repo and select **Forgejo (Codeberg)** as the override source:
 
 ![Obtainium setup](docs/obtainium-setup.jpeg)
 
@@ -34,7 +34,7 @@ A cron job runs `extract.sh` on a schedule of your choice, which:
 ### Requirements
 
 - `bash`, `curl`, `tar`, `jq`, [`just`](https://github.com/casey/just)
-- A [Forgejo](https://forgejo.org) instance
+- A [Forgejo](https://forgejo.org) instance 
 - A Forgejo repository initialized with at least one commit (required for the releases API)
 
 ### Setup
