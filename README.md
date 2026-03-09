@@ -1,4 +1,4 @@
-# plezy-apk
+# plezy-apk-extractor
 
 Mirrors [Plezy](https://github.com/edde746/plezy) releases with the arm64-v8a APK attached, so [Obtainium](https://github.com/ImranR98/Obtainium) can track updates automatically.
 
