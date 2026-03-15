@@ -18,6 +18,11 @@ fi
 TELEGRAM_TOKEN="${TELEGRAM_TOKEN:-}"
 TELEGRAM_CHAT_ID="${TELEGRAM_CHAT_ID:-}"
 
+# ntfy is optional — notifications are skipped if not configured
+NTFY_URL="${NTFY_URL:-}"
+NTFY_TOKEN="${NTFY_TOKEN:-}"
+NTFY_TOPIC="${NTFY_TOPIC:-plezy}"
+
 LAST_VERSION_FILE="$SCRIPT_DIR/.last_version"
 TMPDIR="$(mktemp -d)"
 
@@ -33,6 +38,17 @@ send_telegram() {
         > /dev/null
 }
 
+send_ntfy() {
+    [[ -z "$NTFY_URL" || -z "$NTFY_TOKEN" || -z "$NTFY_TOPIC" ]] && return 0
+    local message="$1"
+    curl -s \
+        -H "Authorization: Bearer ${NTFY_TOKEN}" \
+        -H "Title: plezy-apk-extractor" \
+        -d "$message" \
+        "${NTFY_URL}/${NTFY_TOPIC}" \
+        > /dev/null
+}
+
 cleanup() {
     rm -rf "$TMPDIR"
 }
@@ -44,6 +60,7 @@ on_error() {
     local msg="plezy-apk-extractor failed at line ${line_number} (exit ${exit_code})"
     log "ERROR: $msg"
     send_telegram "❌ <b>plezy-apk-extractor</b>: $msg"
+    send_ntfy "❌ plezy-apk-extractor: $msg"
     exit 1
 }
 trap 'on_error $LINENO' ERR
@@ -80,6 +97,7 @@ asset_name="$(echo "$release_json" | jq -r '.assets[] | select(.name | contains(
 if [[ -z "$asset_url" || "$asset_url" == "null" ]]; then
     log "ERROR: No arm64-v8a asset found in release $tag_name"
     send_telegram "❌ <b>plezy-apk-extractor</b>: No arm64-v8a asset found in release $tag_name"
+    send_ntfy "❌ plezy-apk-extractor: No arm64-v8a asset found in release $tag_name"
     exit 1
 fi
 
@@ -96,6 +114,7 @@ apk_path_in_tar="$(tar -tzf "$tarball_path" | grep '\.apk$' | head -1)"
 if [[ -z "$apk_path_in_tar" ]]; then
     log "ERROR: No APK found inside $asset_name"
     send_telegram "❌ <b>plezy-apk-extractor</b>: No APK found inside $asset_name"
+    send_ntfy "❌ plezy-apk-extractor: No APK found inside $asset_name"
     exit 1
 fi
 
@@ -129,6 +148,7 @@ release_id="$(echo "$forgejo_release" | jq -r '.id')"
 if [[ -z "$release_id" || "$release_id" == "null" ]]; then
     log "ERROR: Failed to create Forgejo release"
     send_telegram "❌ <b>plezy-apk-extractor</b>: Failed to create Forgejo release for $tag_name"
+    send_ntfy "❌ plezy-apk-extractor: Failed to create Forgejo release for $tag_name"
     exit 1
 fi
 
@@ -148,4 +168,5 @@ log "APK uploaded successfully."
 echo "$tag_name" > "$LAST_VERSION_FILE"
 log "Done. Published $tag_name to ${FORGEJO_URL}/${FORGEJO_USER}/${FORGEJO_REPO}/releases/tag/${tag_name}"
 send_telegram "✅ <b>Plezy ${tag_name}</b> published to Forgejo — APK ready for Obtainium"
+send_ntfy "✅ Plezy ${tag_name} published to Forgejo — APK ready for Obtainium"
 log "Script finished"
