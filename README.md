@@ -27,9 +27,9 @@ A cron job runs `extract.sh` on a schedule of your choice, which:
    - Extracts the APK from inside it
    - Creates a matching release on your Forgejo repo
    - Uploads the APK as a release asset
-   - Sends a Telegram notification confirming the publish (if configured)
+   - Sends a notification confirming the publish (Telegram and/or ntfy, if configured)
 4. If already up to date, exits cleanly with a log entry
-5. On any failure, sends a Telegram notification with the error details (if configured)
+5. On any failure, sends a notification with the error details (Telegram and/or ntfy, if configured)
 
 ### Requirements
 
@@ -60,8 +60,11 @@ Edit `.env` with your values:
 | `FORGEJO_USER` | yes | Your Forgejo username |
 | `FORGEJO_REPO` | yes | Forgejo repository name |
 | `FORGEJO_URL` | yes | Your Forgejo instance URL (e.g. `https://forgejo.example.com`) |
-| `TELEGRAM_TOKEN` | no | Telegram bot token — omit to disable notifications |
-| `TELEGRAM_CHAT_ID` | no | Telegram chat ID — omit to disable notifications |
+| `TELEGRAM_TOKEN` | no | Telegram bot token — omit to disable Telegram notifications |
+| `TELEGRAM_CHAT_ID` | no | Telegram chat ID — omit to disable Telegram notifications |
+| `NTFY_URL` | no | ntfy server URL (e.g. `https://ntfy.example.com`) — omit to disable ntfy notifications |
+| `NTFY_TOKEN` | no | ntfy access token |
+| `NTFY_TOPIC` | no | ntfy topic to publish to (default: `plezy`) |
 
 To generate a Forgejo token: **Settings → Applications → Generate Token** (scope: `write:repository`).
 
