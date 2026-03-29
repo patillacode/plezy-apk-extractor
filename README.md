@@ -10,7 +10,7 @@ Just click on the button below from your device to add this repo to Obtainium:
 
 <div align="center">
     <a href="https://apps.obtainium.imranr.dev/redirect.html?r=obtainium://add/https://forgejo.patilla.es/patillacode/plezy-apk-extractor">
-        <img src="https://github.com/ImranR98/Obtainium/blob/main/assets/graphics/badge_obtainium.png" alt="Get it on Obtainium" align="center" height="54" />
+        <img src="docs/badge_obtainium.png" alt="Get it on Obtainium" align="center" height="54" />
     </a>
 </div>
 
