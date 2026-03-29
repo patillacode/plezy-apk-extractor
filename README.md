@@ -6,7 +6,17 @@ Since Plezy v1.13.0, Android assets ship as architecture-specific `.tar.gz` tarb
 
 ## Obtainium setup
 
-When adding the app in Obtainium, set the source URL to this (or your) repo and select **Forgejo (Codeberg)** as the override source:
+Just click on the button below from your device to add this repo to Obtainium:
+
+<div align="center">
+    <a href="https://apps.obtainium.imranr.dev/redirect.html?r=obtainium://add/https://forgejo.patilla.es/patillacode/plezy-apk-extractor">
+        <img src="https://github.com/ImranR98/Obtainium/blob/main/assets/graphics/badge_obtainium.png" alt="Get it on Obtainium" align="center" height="54" />
+    </a>
+</div>
+
+Manually, set the source URL to this (or your) repo:
+
+Remember to select **Forgejo (Codeberg)** as the override source:
 
 ![Obtainium setup](docs/obtainium-setup.jpeg)
 
@@ -34,7 +44,7 @@ A cron job runs `extract.sh` on a schedule of your choice, which:
 ### Requirements
 
 - `bash`, `curl`, `tar`, `jq`, [`just`](https://github.com/casey/just)
-- A [Forgejo](https://forgejo.org) instance 
+- A [Forgejo](https://forgejo.org) instance
 - A Forgejo repository initialized with at least one commit (required for the releases API)
 
 ### Setup
