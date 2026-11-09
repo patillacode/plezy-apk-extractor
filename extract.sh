@@ -69,7 +69,7 @@ log "Script started"
 
 # 1. Fetch latest GitHub release
 log "Fetching latest Plezy release from GitHub..."
-release_json="$(curl -sf "https://api.github.com/repos/edde746/plezy/releases/latest")"
+release_json="$(curl -sf --retry 3 --retry-delay 10 "https://api.github.com/repos/edde746/plezy/releases/latest")"
 tag_name="$(echo "$release_json" | jq -r '.tag_name')"
 release_name="$(echo "$release_json" | jq -r '.name')"
 release_body="$(echo "$release_json" | jq -r '.body // ""')"
@@ -105,7 +105,7 @@ log "Downloading: $asset_name"
 
 # 4. Download the tarball
 tarball_path="$TMPDIR/$asset_name"
-curl -sfL "$asset_url" -o "$tarball_path"
+curl -sfL --retry 3 --retry-delay 10 "$asset_url" -o "$tarball_path"
 
 # 5. Find and extract APK
 log "Locating APK inside tarball..."
